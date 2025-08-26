@@ -1,0 +1,9 @@
+---
+# defaults file for openbao_role
+cluster_port: "8201"
+api_port: "8200"
+docker_image_name: "myopenbao"
+
+openbao_docker_image: "openbao/openbao:latest"
+raft_dir: "/opt/raft"
+openbao_container_name: "openbao"

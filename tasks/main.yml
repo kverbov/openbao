@@ -1,0 +1,55 @@
+---
+#- name: Show host variable 
+#  debug:
+#    var: myvar
+
+#- name: Show global variable 
+#  debug:
+#    msg: "{{ cluster_name }}"
+
+- name: Docker build image
+  become: true
+  community.docker.docker_image:
+    name: "{{ docker_image_name }}"
+#    name: "{{ hostvars['openbao_instances'][0]['docker_image_name'] }}"
+    source: build
+#    tag: latest
+    build:
+      path: ./
+
+- name: Create openbao.hcl config file
+  template:
+    src: openbao.hcl.j2
+    dest: ./openbao.hcl
+    mode: 0644
+#  notify:
+#    - Run container
+
+- name: Remove Container 
+  community.docker.docker_container:
+    name: "{{ openbao_container_name }}"
+    force_kill: true
+    state: absent
+    keep_volumes: false
+
+- name: Run container
+  community.docker.docker_container:
+    name: "{{ openbao_container_name }}"
+    image: "{{ docker_image_name }}"
+    state: started
+    detach: yes
+    memory_swappiness: 0
+    ports:
+      - "{{ cluster_port }}:{{ cluster_port }}"
+      - "{{ api_port }}:{{ api_port }}"
+    env:
+      BAO_DEV_ROOT_TOKEN_ID: "foobar"
+      VAULT_CLUSTER_ADDR: "http://{{ host }}:{{ cluster_port }}"
+      VAULT_ADDR: "http://{{ host }}:{{ api_port }}"
+      VAULT_SKIP_VERIFY: "true"
+      VAULT_TOKEN: "s.rxOcFhVFcPNMiwwwtSeMxkro"
+    volumes:
+      - "/root/openbao.hcl:{{ raft_dir }}/data/openbao.hcl"
+    capabilities:
+      - IPC_LOCK
+    command: server -config="{{ raft_dir }}/data/openbao.hcl"

@@ -1,0 +1,22 @@
+cluster_addr = "{{ hostvars[host]['cluster_addr_url'] }}"
+api_addr = "{{ api_addr_url }}"
+disable_mlock = true
+ui = true
+ 
+listener "tcp" {
+address = "0.0.0.0:{{ api_port }}"
+cluster_address = "0.0.0.0:{{ cluster_port }}"
+tls_disable = true
+}
+ 
+storage "raft" {
+path = "{{ raft_dir }}/data"
+node_id = "{{ name }}"
+
+{% for instance in openbao_instances %}
+  retry_join {
+    leader_api_addr = "{{ api_addr_url }}"
+  }
+{% endfor %}
+
+} 

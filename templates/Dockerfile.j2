@@ -1,0 +1,4 @@
+FROM "{{ docker_image }}"
+
+RUN mkdir -p "{{ raft_dir }}"/data &&\
+chown -R openbao:openbao "{{ raft_dir }}"

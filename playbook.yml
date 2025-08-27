@@ -1,0 +1,8 @@
+- name: Install openbao cluster
+  hosts: all
+  remote_user: root
+  tags: [install]
+  vars_files:
+    - group_vars/all.yml
+  roles:
+    - openbao

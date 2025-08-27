@@ -1,11 +1,9 @@
 ---
-#- name: Show host variable 
-#  debug:
-#    var: myvar
-
-#- name: Show global variable 
-#  debug:
-#    msg: "{{ cluster_name }}"
+- name: Create Dockerfile
+  template:
+    src: Dockerfile.j2
+    dest: ./Dockerfile
+    mode: 0644
 
 - name: Docker build image
   become: true
@@ -25,7 +23,7 @@
 #  notify:
 #    - Run container
 
-- name: Remove Container 
+- name: Remove Container
   community.docker.docker_container:
     name: "{{ openbao_container_name }}"
     force_kill: true
@@ -47,7 +45,7 @@
       VAULT_CLUSTER_ADDR: "http://{{ host }}:{{ cluster_port }}"
       VAULT_ADDR: "http://{{ host }}:{{ api_port }}"
       VAULT_SKIP_VERIFY: "true"
-      VAULT_TOKEN: "s.rxOcFhVFcPNMiwwwtSeMxkro"
+      VAULT_TOKEN: "s.rxOcFhVFcPNMiwwwtSeMMtgT"
     volumes:
       - "/root/openbao.hcl:{{ raft_dir }}/data/openbao.hcl"
     capabilities:

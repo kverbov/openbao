@@ -13,9 +13,9 @@ storage "raft" {
 path = "{{ raft_dir }}/data"
 node_id = "{{ name }}"
 
-{% for instance in openbao_instances %}
+{% for host in ansible_play_hosts %}
   retry_join {
-    leader_api_addr = "{{ api_addr_url }}"
+    leader_api_addr = "{{ hostvars[host].api_addr_url }}"
   }
 {% endfor %}
 

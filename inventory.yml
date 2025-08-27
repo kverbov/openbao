@@ -1,0 +1,30 @@
+all:
+  children:
+    openbao_group:
+      hosts:
+        serv-1.dev.local:
+          ansible_user: root
+          name: vault_node_1
+          host: serv-1.dev.local
+          cluster_addr_url: "http://serv-1.dev.local:{{ cluster_port }}"
+          api_addr_url: "http://serv-1.dev.local:{{ api_port }}"
+          cluster_port: "8201"
+          api_port: "8200"
+        serv-2.dev.local:
+          ansible_user: root
+          name: vault_node_2
+          host: serv-2.dev.local
+          cluster_addr_url: "http://serv-2.dev.local:{{ cluster_port }}"
+          api_addr_url: "http://serv-2.dev.local:{{ api_port }}"
+          cluster_port: "8201"
+          api_port: "8200"
+#    serv-3.dev.local:
+#      ansible_user: root
+#      name: vault_node_3
+#      host: serv-3.dev.local
+#      cluster_addr_url: "http://serv-3.dev.local:{{ cluster_port }}"
+#      api_addr_url: "http://serv-3.dev.local:{{ api_port }}"
+#      cluster_port: "8201"
+#      api_port: "8200"
+#
+
